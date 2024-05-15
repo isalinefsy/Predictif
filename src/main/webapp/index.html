@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Start Page</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    </head>
+    <body>
+        <h1>TD DASI - Initialisation Web</h1>
+        <p> Ce TD vous initie aux technologies Web. Êtes-vous prêts ?</p>
+        <p id="notification"></p>
+        <a href="login.html">Aller à la page de connexion</a><br>
+        <a href="registerClient.html">Aller à la page d'inscription de client</a>
+
+        <ul id="liste-mediums"></ul>
+
+        <script>
+            function demanderConsultation(idMedium) {
+                $('#notification').html("Demande de consultation en cours...");
+                $.ajax({
+                    url: './ActionServlet',
+                    method: 'POST',
+                    data: {
+                        todo: 'demanderConsultation',
+                        idMedium: idMedium
+                    },
+                    dataType: 'json'
+                }).done(function (response) {
+                    if (response.unConnected) {
+                        $('#notification').html("Veuillez vous connecter pour prendre un RDV.");
+                    } else if (response.statut) {
+                        $('#notification').html("Demande de consultation réussie.");
+                    } else {
+                        $('#notification').html("Problème lors de la demande, veuillez réessayer.");
+                    }
+                }).fail(function () {
+                    $('#notification').html("Erreur lors de l'appel AJAX.");
+                });
+            }
+
+            $(document).ready(function () {
+                window.onload = function () {
+                if (performance.navigation.type == 2) { // Le type 2 correspond à la navigation par le bouton retour
+                    window.location.reload(true); // Force le rechargement de la page depuis le serveur
+                }
+            };
+                console.log("chargement de la liste des mediums");
+                $('#notification').html("Chargement des mediums");
+
+                $.ajax({
+                    url: './ActionServlet',
+                    method: 'POST',
+                    data: {
+                        todo: 'listerMediums',
+                    },
+                    dataType: 'json'
+                }).done(function (response) {
+                    console.log('Response', response);
+                    let mediums = response.mediums;
+                    let listeMediumsHtml = $('#liste-mediums');
+                    listeMediumsHtml.empty();
+                    $.each(mediums, function (i, medium) {
+                        let listItem = $("<li>")
+                            .attr("id", medium.id)
+                            .text(medium.denomination + " " + medium.genre + " " + medium.presentation);
+                        let rdvButton = $("<button>")
+                            .text("Prendre RDV")
+                            .on("click", function () {
+                                demanderConsultation(medium.id);
+                            });
+                        listItem.append(rdvButton);
+                        listeMediumsHtml.append(listItem);
+                    });
+                    $('#notification').html("Mediums chargés");
+                }).fail(function (error) {
+                    console.log('Error', error);
+                    $('#notification').html("Erreur lors de l'appel AJAX.");
+                });
+            });
+        </script>
+    </body>
+</html>
