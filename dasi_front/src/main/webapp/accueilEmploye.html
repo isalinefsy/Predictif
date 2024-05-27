@@ -178,6 +178,7 @@
                     },
                     dataType: 'json'
                 }).done(function (response) {
+                    console.log('Response', response);
                     // Afficher une notification sur la page
                     if (response.success) {
                         clearEmployeData(); // Effacer les données côté client
@@ -188,7 +189,8 @@
                     } else {
                         alert("Erreur lors de la tentative de déconnexion.");
                     }
-                }).fail(function () {
+                }).fail(function (error) {
+                    console.log('Error', error);
                     alert("Erreur lors de l'appel au serveur pour la déconnexion.");
                 });
             }
@@ -205,9 +207,10 @@
                     dataType: 'json'
                 }).done(function (response) {
                     employeData = response;
-                    console.log(response);
+                    console.log('Response',response);
                     displayData(); // Appeler la méthode displayData après avoir chargé les données
-                }).fail(function () {
+                }).fail(function (error) {
+                    console.log('Error', error);
                     alert("Erreur lors du chargement des données.");
                     window.location.href = "login.html";
                 });
@@ -231,10 +234,13 @@
                     },
                     dataType: 'json'
                 }).done(function (response) {
+                    console.log('Response', response);
+
                     if (response.consultations) {
                         displayConsultations(response.consultations);
                     }
-                }).fail(function () {
+                }).fail(function (error) {
+                    console.log('Error', error);
                     alert("Erreur lors du chargement des données.");
                 });
             }
@@ -248,10 +254,12 @@
                     },
                     dataType: 'json'
                 }).done(function (response) {
+                    console.log('Response', response);
                     if (response.consultations) {
                         displayClients(response.consultations);
                     }
-                }).fail(function () {
+                }).fail(function (error) {
+                    console.log('Error', error);
                     alert("Erreur lors du chargement des données.");
                 });
             }
@@ -269,7 +277,8 @@
                     if (response) {
                         displayStatistique(response.mediums);
                     }
-                }).fail(function () {
+                }).fail(function (error) {
+                    console.log('Error', error);
                     alert("Erreur lors du chargement des données.");
                 });
             }
@@ -350,11 +359,12 @@
                     },
                     dataType: 'json'
                 }).done(function (response) {
-                    console.log(response);
+                    console.log('Response', response);
                     if (response.infosClient) {
                         displayClientProfile(response);
                     }
-                }).fail(function () {
+                }).fail(function (error) {
+                    console.log('Error', error);
                     alert("Erreur lors du chargement des données.");
                 });
             }
@@ -447,6 +457,7 @@
                     },
                     dataType: 'json'
                 }).done(function (response) {
+                    console.log('Response', response);
                     if (response.statut) {
                         $('#notification').empty();
                         $('#notification').append("Consultation acceptée");
@@ -454,7 +465,8 @@
                     } else {
                         $('#notification').append("Consultation n'a pas pu être lancée");
                     }
-                }).fail(function () {
+                }).fail(function (error) {
+                    console.log('Error', error);
                     alert("Erreur lors de l'appel AJAX");
                 });
             }
@@ -482,7 +494,8 @@
                         $('#predictionError').text(response.error);
                     }
 
-                }).fail(function () {
+                }).fail(function (error) {
+                    console.log('Error', error);
                     alert("Erreur lors de l'appel AJAX");
                 });
             }
@@ -507,7 +520,8 @@
                     } else {
                         $('#notification').append("Consultation n'a pas pu être terminée");
                     }
-                }).fail(function () {
+                }).fail(function (error) {
+                    console.log('Error', error);
                     alert("Erreur lors de l'appel AJAX");
                 });
             }

@@ -52,6 +52,7 @@
                 },
                 dataType: 'json'
             }).done(function (response) {
+                console.log("Response",response);
                 if (response.unConnected) {
                     $('#notification').html("Veuillez vous connecter pour prendre un RDV.");
                 } else if (response.statut) {
@@ -60,6 +61,7 @@
                     $('#notification').html("Problème lors de la demande, veuillez réessayer.");
                 }
             }).fail(function () {
+                console.log('Error', error);
                 $('#notification').html("Erreur lors de l'appel AJAX.");
             });
         }
