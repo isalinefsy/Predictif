@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <meta charset="UTF-8">
+        <title>Predict'IF</title>
+        <link rel="stylesheet" type="text/css" href="css/common.css">
+        <link rel="stylesheet" type="text/css" href="css/accueilEmploye.css">
+        <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    </head>
+    <body>
+        <header>
+            <div class="header-content">
+                <div class="logo">
+                    <h1>Predict'IF <img src="images/predict_if.png" alt="logo" class="logo-img"></h1>
+                </div>
+                <nav>
+                    <a href="#accueil" class="nav-link">Accueil</a>
+                    <a href="#compte" class="nav-link">Mon Compte</a>
+                    <a href="#historique" class="nav-link">Historique</a>
+                    <a href="#deconnexion" class="nav-link" id="logoutLink">Déconnexion</a>
+                </nav>
+            </div>
+        </header>
+
+        <main>
+            <div id="notification-deconnexion" style="display:none; color: red; text-align: center; margin: 10px 0;"></div> <!-- Zone de notification -->
+
+            <div id="accueil" class="page-section container">
+                <h1>Bienvenue <span id="userFirstNameAccueil"></span> !</h1>
+
+                <div class="content-wrapper">
+                    <div class="left-section">
+                        <h4>Consultations en attente</h4>
+                        <ul id="consultationsEnAttenteAccueil"></ul>
+                    </div>
+                    <div class="right-section">
+                        <h4>Liste de mes clients</h4>
+                        <ul id="mesClients"></ul>
+                    </div>
+                    <div class="right-section">
+                        <h4>Médiums populaires</h4>
+                        <ul id="mediumsPopulaires"></ul>
+                    </div>
+                </div>
+            </div>
+
+            <div id="compte" class="page-section container">
+                <h3>Informations du Compte</h3>
+                <div class="profile-container">
+                    <div class="profile-left">
+                        <div class="profile-image-grid">
+                            <img src="images/belier.png" alt="Bélier">
+                            <img src="images/taureau.png" alt="Taureau">
+                            <img src="images/gemeau.png" alt="Gémeaux">
+                            <img src="images/cancer.png" alt="Cancer">
+                            <img src="images/lion.png" alt="Lion">
+                            <img src="images/virgo.png" alt="Vierge">
+                            <img src="images/balance.png" alt="Balance">
+                            <img src="images/scorpion.png" alt="Scorpion">
+                            <img src="images/sagittaire.png" alt="Sagittaire">
+                            <img src="images/capricorne.png" alt="Capricorne">
+                            <img src="images/poisson.png" alt="Verseau">
+                            <img src="images/poissons.png" alt="Poissons">
+                        </div>
+                    </div>
+                    <div class="profile-right">
+                        <label for="userLastName">Nom :</label>
+                        <input type="text" id="userLastName" readonly>
+                        <label for="userFirstName">Prénom :</label>
+                        <input type="text" id="userFirstName" readonly>
+                        <label for="userEmail">Email :</label>
+                        <input type="email" id="userEmail" readonly>
+                        <label for="userConsultation">Nombre de consultations terminées :</label>
+                        <input type="text" id="userConsultation" readonly>
+                        <label for="userPhone">Téléphone :</label>
+                        <input type="text" id="userPhone" readonly>
+                    </div>
+                </div>
+            </div>
+
+            <div id="historique" class="page-section container">
+                <h3>Historique des Consultations</h3>
+                <div class="content-wrapper">
+                    <div class="left-section">
+                        <h4>Consultations en attente</h4>
+                        <ul id="consultationsEnAttenteHistorique"></ul>
+                    </div>
+                    <div class="right-section">
+                        <h4>Consultations en cours</h4>
+                        <ul id="consultationsEnCours"></ul>
+                        <h4>Consultations terminées</h4>
+                        <ul id="consultationsTerminees"></ul>
+                    </div>
+                </div>
+            </div>
+
+            <div id="profilClient" class="page-section container">
+                <h3>Profil du Client</h3>
+                <div class="profile-container">
+                    <div class="profile-left">
+                        <p>Nom : <span id="profilNom"></span></p>
+                        <p>Prénom : <span id="profilPrenom"></span></p>
+                        <p>Email : <span id="profilEmail"></span></p>
+                        <p>Date de naissance : <span id="profilDateNaissance"></span></p>
+                        <p>Adresse : <span id="profilAdresse"></span></p>
+                        <p>Téléphone : <span id="profilTelephone"></span></p>
+                        <p>Signe du zodiaque : <span id="profilSigneZodiaque"></span></p>
+                        <p>Signe astrologique chinois : <span id="profilSigneAstroChinois"></span></p>
+                        <p>Couleur porte-bonheur : <span id="profilCouleurPorteBonheur"></span></p>
+                        <p>Animal totem : <span id="profilAnimalTotem"></span></p>
+                    </div>
+                    <div class="profile-right">
+                        <h4>Historique des consultations du client</h4>
+                        <ul id="historiqueClient"></ul>
+                        <h4>Consultation en attente </h4>
+                        <p><span id="notification"></span></p>
+                        <div id="comment-section" style="display:none;">
+                            <input type="text" id="champ-commentaire" size="40" required placeholder="Entrez votre commentaire">
+                            <p id="comment-error" style="color: red; display: none;">Pas de commentaire effectué.</p>
+                        </div>
+                        <div id="prediction-section" style="display:none;">
+                            <h4> En manque d'inspiration : </h4>
+                            <p>Prédiction : <span id="prediction-notification"></span></p>
+                            <input type="text" id="champ-amour" size="40" required placeholder="Amour de 1 à 4">
+                            <input type="text" id="champ-sante" size="40" required placeholder="Santé de 1 à 4">
+                            <input type="text" id="champ-travail" size="40" required placeholder="Travail de 1 à 4">
+                            <p>Prédiction Amour : <span id="predictionAmour"></span></p>
+                            <p>Prédiction Santé : <span id="predictionSante"></span></p>
+                            <p>Prédiction Travail : <span id="predictionTravail"></span></p>
+                            <p>Message : <span id="predictionError"></span></p>
+                            <button id="bouton-prediction">Demander une prédiction</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <script>
+            $(document).ready(function () {
+                // Masquer toutes les sections de page
+                $('.page-section').hide();
+                // Gestion des liens de navigation
+                $('.nav-link').click(function (e) {
+                    e.preventDefault();
+                    var target = $(this).attr('href').substring(1);
+                    $('.page-section').hide();
+                    $('#' + target).show();
+
+                    if (employeData && target === 'compte') {
+                        displayData();
+                    }
+                });
+
+                // Gestion du lien de déconnexion
+                $('#logoutLink').click(function (e) {
+                    e.preventDefault();
+                    deconnecterUtilisateur();
+                });
+
+                // Charger les données initiales de l'employé
+                loadInitialData();
+                // Charger l'historique des consultations de l'employé
+                loadHistoriqueConsultation();
+                // Charger la liste des clients de l'employé
+                loadClients();
+                //Charger les statistiques
+                loadStatistique();
+                // Afficher la section 'accueil' par défaut
+                $('#accueil').show();
+            });
+
+            function deconnecterUtilisateur() {
+                $.ajax({
+                    url: './ActionServlet',
+                    method: 'POST',
+                    data: {
+                        todo: 'deconnexion',
+                    },
+                    dataType: 'json'
+                }).done(function (response) {
+                    // Afficher une notification sur la page
+                    if (response.success) {
+                        clearEmployeData(); // Effacer les données côté client
+                        $('#notification-deconnexion').html("Déconnexion en cours. Vous allez être redirigé.").show();
+                        setTimeout(function () {
+                            window.location.href = "index.html";  // Rediriger vers la page d'accueil
+                        }, 2000);
+                    } else {
+                        alert("Erreur lors de la tentative de déconnexion.");
+                    }
+                }).fail(function () {
+                    alert("Erreur lors de l'appel au serveur pour la déconnexion.");
+                });
+            }
+
+            var employeData = null;
+
+            function loadInitialData() {
+                $.ajax({
+                    url: './ActionServlet',
+                    method: 'POST',
+                    data: {
+                        todo: 'obtenirProfilEmploye',
+                    },
+                    dataType: 'json'
+                }).done(function (response) {
+                    employeData = response;
+                    console.log(response);
+                    displayData(); // Appeler la méthode displayData après avoir chargé les données
+                }).fail(function () {
+                    alert("Erreur lors du chargement des données.");
+                    window.location.href = "login.html";
+                });
+            }
+
+            function displayData() {
+                $('#userFirstNameAccueil').html(employeData.prenom);
+                $('#userLastName').val(employeData.nom); // Utilisation de .val() pour les inputs
+                $('#userFirstName').val(employeData.prenom);
+                $('#userEmail').val(employeData.mail);
+                $('#userConsultation').val(employeData.nbConsultation);
+                $('#userPhone').val(employeData.tel);
+            }
+
+            function loadHistoriqueConsultation() {
+                $.ajax({
+                    url: './ActionServlet',
+                    method: 'POST',
+                    data: {
+                        todo: 'obtenirHistoriqueConsultationEmploye',
+                    },
+                    dataType: 'json'
+                }).done(function (response) {
+                    if (response.consultations) {
+                        displayConsultations(response.consultations);
+                    }
+                }).fail(function () {
+                    alert("Erreur lors du chargement des données.");
+                });
+            }
+
+            function loadClients() {
+                $.ajax({
+                    url: './ActionServlet',
+                    method: 'POST',
+                    data: {
+                        todo: 'obtenirClientsEmploye',
+                    },
+                    dataType: 'json'
+                }).done(function (response) {
+                    if (response.consultations) {
+                        displayClients(response.consultations);
+                    }
+                }).fail(function () {
+                    alert("Erreur lors du chargement des données.");
+                });
+            }
+
+            function loadStatistique() {
+                $.ajax({
+                    url: './ActionServlet',
+                    method: 'POST',
+                    data: {
+                        todo: 'obtenirStatistique',
+                    },
+                    dataType: 'json'
+                }).done(function (response) {
+                    console.log("Réponse de statistiques", response);
+                    if (response) {
+                        displayStatistique(response.mediums);
+                    }
+                }).fail(function () {
+                    alert("Erreur lors du chargement des données.");
+                });
+            }
+
+            function displayConsultations(consultations) {
+                $('#consultationsEnAttenteAccueil').empty();
+                $('#consultationsEnAttenteHistorique').empty();
+                $('#consultationsEnCours').empty();
+                $('#consultationsTerminees').empty();
+
+                consultations.forEach(function (consultation) {
+                    let consultationItem = $('<li>').text(
+                            consultation.dateDemande + " - " +
+                            consultation.nomClient + " " +
+                            consultation.prenomClient + " (Medium: " +
+                            consultation.medium + ")"
+                            );
+
+
+                    if (consultation.etat === 'En attente') {
+                        let consultationProfilButton = $('<button>').text(consultation.prenomClient + " " + consultation.nomClient + " " + consultation.dateDemande).on('click', function () {
+                            afficherProfilClient(consultation.idClient);
+                        });
+                        $('#consultationsEnAttenteHistorique').append(consultationItem.clone());
+                        consultationItem.append(' ', consultationProfilButton);
+                        $('#consultationsEnAttenteAccueil').append(consultationItem);
+                    } else if (consultation.etat === 'En cours') {
+                        $('#consultationsEnCours').append(consultationItem);
+                    } else if (consultation.etat === 'Terminée') {
+                        $('#consultationsTerminees').append(consultationItem);
+                    }
+                });
+            }
+
+            function displayClients(clients) {
+                $('#mesClients').empty();
+
+                clients.forEach(function (client) {
+                    let clientItem = $('<li>').text(
+                            client.nomClient + " " +
+                            client.prenomClient + " (ID: " +
+                            client.idClient + ")"
+                            );
+                    let profileButton = $('<button>').text('Afficher le profil').on('click', function () {
+                        afficherProfilClient(client.idClient);
+                    });
+
+                    clientItem.append(' ', profileButton);
+                    $('#mesClients').append(clientItem);
+                });
+            }
+
+            function displayStatistique(mediums) {
+                $('#mediumsPopulaires').empty();
+
+                mediums.forEach(function (medium) {
+                    let mediumItem = $('<li>').text(
+                            medium.denomination + " - " +
+                            medium.nbConsultation
+                            );
+                    $('#mediumsPopulaires').append(mediumItem);
+                });
+            }
+
+            function afficherProfilClient(clientId) {
+                // Vider les notifications et l'historique des consultations du client
+                $('#notification').empty();
+                $('#historiqueClient').empty();
+                $('#comment-section').hide();
+                $('#prediction-section').hide();
+
+                $.ajax({
+                    url: './ActionServlet',
+                    method: 'POST',
+                    data: {
+                        todo: 'obtenirProfilClient',
+                        idClient: clientId
+                    },
+                    dataType: 'json'
+                }).done(function (response) {
+                    console.log(response);
+                    if (response.infosClient) {
+                        displayClientProfile(response);
+                    }
+                }).fail(function () {
+                    alert("Erreur lors du chargement des données.");
+                });
+            }
+
+            function displayClientProfile(response) {
+                $('#profilNom').text(response.infosClient.nom);
+                $('#profilPrenom').text(response.infosClient.prenom);
+                $('#profilEmail').text(response.infosClient.mail);
+                $('#profilDateNaissance').text(response.infosClient.dateNaissance);
+                $('#profilAdresse').text(response.infosClient.adresse);
+                $('#profilTelephone').text(response.infosClient.tel);
+                $('#profilSigneZodiaque').text(response.infosClient.signeZodiaque);
+                $('#profilSigneAstroChinois').text(response.infosClient.signeAstroChinois);
+                $('#profilCouleurPorteBonheur').text(response.infosClient.couleurPorteBonheur);
+                $('#profilAnimalTotem').text(response.infosClient.animalTotem);
+
+                let consultationEnCours = false;
+                let consultationAcceptee = false;
+
+                response.historiqueConsultation.forEach(function (consultation) {
+                    let consultationItem = $('<li>').text(
+                            consultation.date + " - " +
+                            consultation.nomClient + " " +
+                            consultation.prenomClient + " (Medium: " +
+                            consultation.medium + ")" + " Commentaire : " +
+                            consultation.commentaire
+                            );
+
+                    if (consultation.etat === 'Terminée') {
+                        $('#historiqueClient').append(consultationItem);
+                    } else if (consultation.etat === 'En attente' && consultation.idEmploye === employeData.id) {
+                        console.log("Consultation en attente trouvée :", consultation);
+                        $('#notification').text("Vous avez une consultation en attente avec ce client ");
+                        consultationAcceptee = true;
+                        let consultationButton = $('<button>').text('Démarrer la consultation').on('click', function () {
+                            demarrerConsultation(consultation.idConsultation);
+                        });
+                        $('#notification').append(consultationButton);
+
+                    } else if (consultation.etat === 'En cours' && consultation.idEmploye === employeData.id) {
+                        consultationEnCours = true;
+                        $('#notification').text("Vous avez une consultation en cours avec ce client ");
+                        $('#prediction-section').show(); // Afficher la section de prédiction si la consultation est en attente
+                        // Gestion du bouton de prédiction
+                        $('#bouton-prediction').click(function () {
+                            var amour = $('#champ-amour').val();
+                            var sante = $('#champ-sante').val();
+                            var travail = $('#champ-travail').val();
+                            if (!amour || !sante || !travail) {
+                                alert('Tous les champs de prédiction doivent être remplis.');
+                                return;
+                            }
+                            demanderPrediction(amour, sante, travail, consultation.idClient);
+                        });
+                        let finConsultationButton = $('<button>').text('Valider la consultation').on('click', function () {
+                            var commentaire = $('#champ-commentaire').val();
+                            if (!commentaire) {
+                                $('#comment-error').show();
+                                return;
+                            }
+                            $('#comment-error').hide();
+                            validerConsultation(consultation.idConsultation, commentaire);
+
+                        });
+                        $('#comment-section').show();
+                        $('#notification').append(finConsultationButton);
+                    }
+                });
+
+                if ($('#historiqueClient').children().length === 0) {
+                    $('#historiqueClient').append($('<li>').text("Ce client n'a pas encore effectué de consultation. "));
+                }
+
+                if (!consultationAcceptee && !consultationEnCours) {
+                    $('#notification').text("Vous n'avez pas de demande en attente avec cette personne.");
+                    $('#comment-section').hide();
+                }
+
+                $('.page-section').hide();
+                $('#profilClient').show();
+            }
+
+            function demarrerConsultation(id) {
+                $.ajax({
+                    url: './ActionServlet',
+                    method: 'POST',
+                    data: {
+                        todo: 'accepterConsultation',
+                        idConsultation: id
+                    },
+                    dataType: 'json'
+                }).done(function (response) {
+                    if (response.statut) {
+                        $('#notification').empty();
+                        $('#notification').append("Consultation acceptée");
+                        location.reload(); // Recharger la page après avoir accepté la consultation
+                    } else {
+                        $('#notification').append("Consultation n'a pas pu être lancée");
+                    }
+                }).fail(function () {
+                    alert("Erreur lors de l'appel AJAX");
+                });
+            }
+
+            function demanderPrediction(amour, sante, travail, idClient) {
+                $.ajax({
+                    url: './ActionServlet',
+                    method: 'POST',
+                    data: {
+                        todo: 'demanderPrediction',
+                        amour: amour,
+                        sante: sante,
+                        travail: travail,
+                        idClient: idClient
+                    },
+                    dataType: 'json'
+                }).done(function (response) {
+                    console.log("Réponse de prédiction:", response); // Ajoutez ce log pour déboguer
+                    if (!response.error) {
+                        // Gérer la réponse de la demande de prédiction
+                        $('#predictionAmour').text(response.predictions[0].amour);
+                        $('#predictionSante').text(response.predictions[1].sante);
+                        $('#predictionTravail').text(response.predictions[2].travail);
+                    } else {
+                        $('#predictionError').text(response.error);
+                    }
+
+                }).fail(function () {
+                    alert("Erreur lors de l'appel AJAX");
+                });
+            }
+
+            function validerConsultation(id, commentaire) {
+                $.ajax({
+                    url: './ActionServlet',
+                    method: 'POST',
+                    data: {
+                        todo: 'validerConsultation',
+                        idConsultation: id,
+                        commentaire: commentaire
+                    },
+                    dataType: 'json'
+                }).done(function (response) {
+                    if (response.statut) {
+                        $('#notification').empty();
+                        $('#notification').append("Consultation terminée");
+                        setTimeout(function () {
+                            location.reload(true);  // Rafraîchir la page pour vider le cache
+                        }, 2000);
+                    } else {
+                        $('#notification').append("Consultation n'a pas pu être terminée");
+                    }
+                }).fail(function () {
+                    alert("Erreur lors de l'appel AJAX");
+                });
+            }
+
+            function clearEmployeData() {
+                localStorage.clear(); // Effacer toutes les données stockées localement
+            }
+        </script>
+
+    </body>
+</html>

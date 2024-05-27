@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Start Page</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link rel="stylesheet" type="text/css" href="css/common.css">
+    <link rel="stylesheet" type="text/css" href="css/index.css">
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <div class="logo">
+                <h1>Predict'IF <img src="images/predict_if.png" alt="logo" class="logo-img"></h1>
+            </div>
+            <nav>
+                <a href="login.html">Se connecter</a>
+                <a href="registerClient.html">Créer un compte</a>
+            </nav>
+        </div>
+    </header>
+    <div class="container">
+        <div class="welcome-section">
+            <h1>Bienvenue sur Predict'IF !</h1>
+            <p>
+                Predict'IF est un cabinet de voyance par téléphone. Ses mediums sont 
+                <a href="#">spiritistes</a>, <a href="#">cartomanciens</a> ou <a href="#">astrologues</a>. 
+                Reconnus <a href="#">internationalement</a>, ils ont été sélectionnés avec la plus grande rigueur, 
+                et sont réunis pour travailler avec <a href="#">précision</a>, <a href="#">honnêteté</a> et <a href="#">sérieux</a> 
+                dans leur spécialité respective. Leurs prédictions <a href="#">personnalisées</a> pour chaque client répondent à toutes 
+                les questions d'ordre <a href="#">sentimental</a>, <a href="#">professionnel</a> ou <a href="#">psychologique</a> 
+                dans le plus strict respect déontologique.
+            </p>
+        </div>
+        
+        <h2>Liste des mediums :</h2>
+        <p id="notification"></p>
+        <div class="medium-list" id="liste-mediums">
+            <!-- Les médiums seront ajoutés ici dynamiquement -->
+        </div>
+        
+    </div>
+    <script>
+        function demanderConsultation(idMedium) {
+            $('#notification').html("Demande de consultation en cours...");
+            $.ajax({
+                url: './ActionServlet',
+                method: 'POST',
+                data: {
+                    todo: 'demanderConsultation',
+                    idMedium: idMedium
+                },
+                dataType: 'json'
+            }).done(function (response) {
+                if (response.unConnected) {
+                    $('#notification').html("Veuillez vous connecter pour prendre un RDV.");
+                } else if (response.statut) {
+                    $('#notification').html("Demande de consultation réussie.");
+                } else {
+                    $('#notification').html("Problème lors de la demande, veuillez réessayer.");
+                }
+            }).fail(function () {
+                $('#notification').html("Erreur lors de l'appel AJAX.");
+            });
+        }
+
+        $(document).ready(function () {
+            console.log("chargement de la liste des mediums");
+            $('#notification').html("Chargement des mediums");
+
+            $.ajax({
+                url: './ActionServlet',
+                method: 'POST',
+                data: {
+                    todo: 'listerMediums',
+                },
+                dataType: 'json'
+            }).done(function (response) {
+                console.log('Response', response);
+                let mediums = response.mediums;
+                let listeMediumsHtml = $('#liste-mediums');
+                listeMediumsHtml.empty();
+                $.each(mediums, function (i, medium) {
+                    let listItem = $("<div>")
+                        .addClass("medium-card")
+                        .attr("id", medium.id)
+                        .append(
+                            $("<h3>").text(medium.denomination),
+                            $("<p>").text(medium.presentation),
+                            $("<button>")
+                                .text("Prendre RDV")
+                                .on("click", function () {
+                                    demanderConsultation(medium.id);
+                                })
+                        );
+                    listeMediumsHtml.append(listItem);
+                });
+                $('#notification').html("Mediums chargés");
+            }).fail(function (error) {
+                console.log('Error', error);
+                $('#notification').html("Erreur lors de l'appel AJAX.");
+            });
+        });
+    </script>
+</body>
+</html>

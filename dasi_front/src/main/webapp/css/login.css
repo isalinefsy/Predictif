@@ -1,0 +1,82 @@
+@import url('common.css');
+
+body {
+    background-color: #e5e5f7;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+    width: 100vw;
+    height: 100vh;
+}
+
+.container {
+    background: #e5e5f7;
+    padding: 2em;
+    width: 100%;
+    height: calc(100vh - 60px); /* Ajustement pour prendre toute la hauteur disponible */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-sizing: border-box;
+}
+
+.login-section {
+    background-color: #d8b4ff;
+    padding: 3em;
+    border-radius: 0.5em;
+    text-align: center;
+    margin-bottom: 1em;
+    box-sizing: border-box;
+    width: 95%;  /* Augmenter la largeur à 60% */
+    max-width: 20000px;  /* Augmenter la largeur maximale */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.login-section h1 {
+    color: #333;
+    margin-bottom: 1em;
+}
+
+form {
+    width: 100%;
+}
+
+label {
+    margin: 0.5em 0 0.25em 0;
+    font-weight: bold;
+}
+
+button {
+    padding: 0.75em;
+    background-color: #6200ea;
+    color: white;
+    border: none;
+    border-radius: 0.25em;
+    cursor: pointer;
+    width: 100%;
+    max-width: 400px;
+}
+
+button:hover {
+    background-color: #5b00d1;
+}
+
+.zodiac-images {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-bottom: 2em;
+}
+
+.zodiac-images img {
+    width: 60px;
+    height: 60px;
+    margin: 10px;
+    border-radius: 50%;
+}
+
+
